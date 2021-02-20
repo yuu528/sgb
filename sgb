@@ -1,0 +1,100 @@
+#!/bin/bash
+
+VERSION='1.0'
+
+# show command usage
+showusage() {
+	echo 'Usage: sgb [-h|-i <string>] <commands>'
+}
+
+
+# exit script if there are no args
+[ -z "$1" ] && {
+	showusage
+	exit 1
+}
+
+showhelp() {
+	cat <<-EOF
+	sgb - コマンドラインからシェル芸botを使用する
+	Version: $VERSION
+	Author: yuu528
+	Repository: https://github.com/yuu528/sgb
+
+	Usage: sgb [options] <script>
+
+	Options:
+	    --help	-h		: ヘルプを表示します。
+	    		-i <string>	: 添付画像を指定します。
+
+	Thanks:
+	    jiro4989氏のwebsh (https://websh.jiro4989.com/) を使用させていただいています。素晴らしいサービスをありがとうございます。
+	EOF
+}
+
+files=()
+
+# option check
+while getopts 'i:h-:' opts; do
+	case $opts in
+		-)
+			echo $OPTARG
+			case $OPTARG in
+				help)
+					showhelp
+					exit 1;;
+			esac;;
+
+		i)
+			# exit script if specified file not found
+			[ -f $OPTARG ] || {
+				echo "file $OPTARG not found."
+				exit 1
+			}
+			# add file to array
+			files=(${files[@]} $OPTARG);;
+
+		h)
+			showhelp
+			exit 1;;
+	esac
+done
+
+# shift option args
+shift $(($OPTIND - 1))
+
+# convert files with base64 to create json array
+queryarr='['$(
+	for f in "${files[@]}"; do
+		echo "\"$(base64 -w0 $f)\""
+	done | paste -sd,
+)']'
+
+# send request
+return=$(
+	jq -n --arg code "$*" --argjson images "$queryarr" '{code: $code, images: $images}' |
+	curl -s -X POST -d @- 'https://websh.jiro4989.com/api/shellgei'
+)
+
+# print stdout & stderr
+echo "$return" | jq -j '.stdout, .stderr'
+
+# save images
+length=$(echo "$return" | jq '.images | length')
+for i in $(seq 0 $(($length - 1))); do
+	# get file extention
+	ext=$(echo "$return" | jq -r ".images[$i].format")
+
+	# show prompt if the file is exists
+	[ -e sgb_$i.$ext ] && {
+		read -n1 -p "file sgb_$i.$ext is exiting. would you like to overwrite it? [Y/n] " yn
+		echo
+		case "$yn" in
+			"" | [Yy]) :;;
+			*) echo "cannot save sgb_$i.$ext: the file is exists" >&2; continue;;
+		esac
+	}
+
+	# write image
+	echo "$return" | jq -r ".images[$i].image" | base64 -d > sgb_$i.$ext
+done
