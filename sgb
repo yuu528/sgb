@@ -24,8 +24,8 @@ showhelp() {
 	Usage: sgb [options] <script>
 
 	Options:
-	    --help	-h		: ヘルプを表示します。
-	    		-i <string>	: 添付画像を指定します。
+	    --help		-h		: ヘルプを表示します。
+	    --image=<string>	-i <string>	: 添付画像を指定します。
 
 	Thanks:
 	    jiro4989氏のwebsh (https://websh.jiro4989.com/) を使用させていただいています。素晴らしいサービスをありがとうございます。
@@ -36,16 +36,14 @@ files=()
 
 # option check
 while getopts 'i:h-:' opts; do
-	case $opts in
-		-)
-			echo $OPTARG
-			case $OPTARG in
-				help)
-					showhelp
-					exit 1;;
-			esac;;
+	# process for long option
+	[ "$opts" = "-" ] && {
+		opts=$(echo $OPTARG | cut -d= -f1)
+		OPTARG=$(echo $OPTARG | cut -d= -f2)
+	}
 
-		i)
+	case $opts in
+		i|image)
 			# exit script if specified file not found
 			[ -f $OPTARG ] || {
 				echo "file $OPTARG not found."
@@ -54,7 +52,7 @@ while getopts 'i:h-:' opts; do
 			# add file to array
 			files=(${files[@]} $OPTARG);;
 
-		h)
+		h|help)
 			showhelp
 			exit 1;;
 	esac
