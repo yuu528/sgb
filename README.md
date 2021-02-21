@@ -5,7 +5,8 @@ Linuxのコマンドラインからシェル芸botを実行する
 `sgb [options] <command>`
 
 `-h` `--help`: ヘルプを表示します。  
-`-i <string>`: 添付画像を設定します。
+`-i <string>` `--image=<string>`: 添付画像を指定します。  
+`-d <string>` `--save-dir=<string>`: 画像の保存先を指定します。
 
 ## 使用例
 ```
