@@ -26,6 +26,7 @@ showhelp() {
 	Options:
 	    --help		-h		: ヘルプを表示します。
 	    --image=<string>	-i <string>	: 添付画像を指定します。
+		--save-dir=<string>	-d <string>	: 画像の保存先を指定します。
 
 	Thanks:
 	    jiro4989氏のwebsh (https://websh.jiro4989.com/) を使用させていただいています。素晴らしいサービスをありがとうございます。
@@ -33,9 +34,10 @@ showhelp() {
 }
 
 files=()
+save_dir="."
 
 # option check
-while getopts 'i:h-:' opts; do
+while getopts 'i:d:h-:' opts; do
 	# process for long option
 	[ "$opts" = "-" ] && {
 		opts=$(echo $OPTARG | cut -d= -f1)
@@ -51,6 +53,15 @@ while getopts 'i:h-:' opts; do
 			}
 			# add file to array
 			files=(${files[@]} $OPTARG);;
+
+		d|save-dir)
+			# set save dir
+			save_dir=$(readlink -f $OPTARG)
+			# exit if specified directory not found
+			[ -d $save_dir ] || {
+				echo "directory $OPTARG not found."
+				exit 1
+			};;
 
 		h|help)
 			showhelp
@@ -94,5 +105,5 @@ for i in $(seq 0 $(($length - 1))); do
 	}
 
 	# write image
-	echo "$return" | jq -r ".images[$i].image" | base64 -d > sgb_$i.$ext
+	echo "$return" | jq -r ".images[$i].image" | base64 -d > $save_dir/sgb_$i.$ext
 done
