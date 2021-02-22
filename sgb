@@ -7,13 +7,7 @@ showusage() {
 	echo 'Usage: sgb [options] <commands>'
 }
 
-
-# exit script if there are no args
-[ -z "$1" ] && {
-	showusage
-	exit 1
-}
-
+# show full help
 showhelp() {
 	cat <<-EOF
 	sgb - コマンドラインからシェル芸botを使用する
@@ -31,6 +25,12 @@ showhelp() {
 	Thanks:
 	    jiro4989氏のwebsh (https://websh.jiro4989.com/) を使用させていただいています。素晴らしいサービスをありがとうございます。
 	EOF
+}
+
+# exit script if there are no args
+[ -z "$1" ] && {
+	showusage
+	exit 1
 }
 
 files=()
