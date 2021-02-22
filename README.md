@@ -6,7 +6,7 @@ Linuxのコマンドラインからシェル芸botを実行する
 
 `-h` `--help`: ヘルプを表示します。  
 `-i <string>` `--image=<string>`: 添付画像を指定します。  
-`-d <string>` `--save-dir=<string>`: 画像の保存先を指定します。
+`-d <string>` `--save-dir=<string>`: 画像の保存先を指定します。(デフォルトではカレントディレクトリに保存）
 
 ## 使用例
 ```
