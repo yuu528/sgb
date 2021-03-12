@@ -18,9 +18,9 @@ showhelp() {
 	Usage: sgb [options] <script>
 
 	Options:
-	    --help		-h		: ヘルプを表示します。
-	    --image=<string>	-i <string>	: 添付画像を指定します。
-	    --save-dir=<string>	-d <string>	: 画像の保存先を指定します。
+	    --help              -h          : ヘルプを表示します。
+	    --image=<string>    -i <string> : 添付画像を指定します。
+	    --save-dir=<string> -d <string> : 画像の保存先を指定します。指定のない場合はカレントディレクトリに保存します。
 
 	Thanks:
 	    jiro4989氏のwebsh (https://websh.jiro4989.com/) を使用させていただいています。素晴らしいサービスをありがとうございます。
