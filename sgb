@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION='1.1.1'
+VERSION='1.2'
 
 # show command usage
 showusage() {
@@ -86,7 +86,8 @@ return=$(
 )
 
 # print stdout & stderr
-echo "$return" | jq -j '.stdout, .stderr'
+echo "$return" | jq -j '.stdout'
+echo "$return" | jq -j '.stderr' >&2
 
 # save images
 length=$(echo "$return" | jq '.images | length')
