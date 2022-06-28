@@ -10,7 +10,7 @@ showusage() {
 # show full help
 showhelp() {
 	cat <<-EOF
-	sgb - コマンドラインからシェル芸botを使用する
+	sgb - コマンドラインからシェル芸を実行する
 	Version: $VERSION
 	Author: yuu528
 	Repository: https://github.com/yuu528/sgb

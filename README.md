@@ -1,5 +1,5 @@
 # sgb
-Linuxのコマンドラインからシェル芸botを実行する
+Linuxのコマンドラインからシェル芸を実行する
 
 ## 使い方
 `sgb [options] <command>`
